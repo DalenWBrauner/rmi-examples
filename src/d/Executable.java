@@ -4,6 +4,10 @@ import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
 
+import d.animals.Animal;
+import d.animals.Cat;
+import d.animals.Dog;
+
 public class Executable {
     public final static int portNo = 64246;
     public final static String thingName = "thing";
@@ -18,12 +22,15 @@ public class Executable {
             // Create the registry
             Registry registry = LocateRegistry.createRegistry(portNo);
 
-            // Create the RemoteThing and a stub for it
-            Thing thing = new Something();
-            Thing stub = (Thing) UnicastRemoteObject.exportObject(thing, 0);
+            // Create a Dog, its stub, and register it.
+            Animal spot = new Dog();
+            Animal spotStub = (Animal) UnicastRemoteObject.exportObject(spot, 0);
+            registry.rebind("Dog", spotStub);
 
-            // Bind that Thing in the registry
-            registry.rebind(thingName, stub);
+            // Create a Cat, its stub, and register it.
+            Animal garfield = new Cat();
+            Animal garfieldStub = (Animal) UnicastRemoteObject.exportObject(garfield, 0);
+            registry.rebind("Cat", garfieldStub);
 
         } catch (Exception e) {
             System.err.println("Server exception:");
@@ -36,19 +43,16 @@ public class Executable {
             // Connect to the registry
             Registry registry = LocateRegistry.getRegistry(portNo);
 
-            // Get a remote thing
-            Thing rThing = (Thing) registry.lookup(thingName);
+            // Get a Dog, let's forget it's on a server somewhere
+            Animal localDog = (Animal) registry.lookup("Dog");
 
-            // Create a local thing
-            Thing lThing = new Something();
+            // Get a Cat, let's forget it's on a server somewhere
+            Animal localCat = (Animal) registry.lookup("Cat");
 
-            // Call .doSomething();
-            System.out.println("Calling rThing.doSomething();");
-            System.out.println(
-                    rThing.doSomething());
-            System.out.println("Calling lThing.doSomething();");
-            System.out.println(
-                    lThing.doSomething());
+            System.out.println("Petting the dog!");
+            localDog.pet();
+            System.out.println("Petting the cat!");
+            localCat.pet();
 
         } catch (Exception e) {
             System.err.println("Client exception:");

@@ -6,6 +6,8 @@ import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
 
+import f.game.Game;
+
 public class Executable {
     public final static int portNo = 64246;
 
@@ -40,8 +42,11 @@ public class Executable {
 
     private static void executeServer() throws RemoteException {
         establishServerRegistry();
-
         System.out.println("Server started!");
+
+        // Just run a local game for now
+        Game game = new Game();
+        game.start();
     }
 
     /** Instantiate the server's registry */

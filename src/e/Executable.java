@@ -19,7 +19,6 @@ import e.food.Sub;
 
 public class Executable {
     public final static int portNo = 64246;
-    public final static String thingName = "thing";
 
     // Server-only
     public static Registry serverRegistry;

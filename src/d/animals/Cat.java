@@ -6,7 +6,6 @@ import java.util.Random;
 public class Cat implements Animal {
     private Random random = new Random();
     private String[] catNoises = {"Meow", "Mow", "...", "Prrrr", ".....", "HISSSSSS", "Nyan"};
-    private int stomach = 0;
 
     @Override
     public String speak() throws RemoteException {

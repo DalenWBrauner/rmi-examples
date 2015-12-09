@@ -14,15 +14,9 @@ import d.animals.Dog;
 
 public class Executable {
     public final static int portNo = 64246;
-    public final static String thingName = "thing";
 
     // Server-only
     public static Registry serverRegistry;
-
-    // Client-only
-    public final static String[] menu = {"Raspberry", "Pizza", "Sub"};
-    public static Random chef = new Random();
-
 
     public static void main(String[] args) {
         if (args.length > 0)    executeServer();
@@ -90,7 +84,6 @@ public class Executable {
                 System.out.println("but let's pet it!");
                 animal.pet();
             }
-
 
         } catch (Exception e) {
             System.err.println("Client exception:");

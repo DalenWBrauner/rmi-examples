@@ -32,9 +32,10 @@ public class Cat implements Animal {
     }
 
     @Override
-    public void eat(Food food) throws RemoteException {
-        System.out.print("A cat eats some small amount of the "+food.whatKind()+" in front of it.");
+    public void feed(Food food) throws RemoteException {
+        System.out.print("A cat eats some small amount of the " + food.whatKind() + " in front of it");
         intoTheStomach( food.consumeSome(random.nextInt(20)) );
+        System.out.print(", and there was " + String.valueOf(food.isLeft()) + "% left. ");
         System.out.println(catNoise()+".");
     }
 

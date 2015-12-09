@@ -1,9 +1,11 @@
 package d.food;
 
 public class Raspberry implements Food {
+    private static final long serialVersionUID = -3295408779337680658L;
+
     // Static vars
-    private final static String whatKind = "single raspberry";
-    private final static int nutritionalContent = 15; // Still healthier than pizza
+    private static final String whatKind = "single raspberry";
+    private static final int nutritionalContent = 15; // Still healthier than pizza
 
     // Local vars
     /* We're representing a single raspberry here, no percents allowed */

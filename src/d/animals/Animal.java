@@ -20,7 +20,7 @@ public interface Animal extends Remote {
             throws RemoteException;
 
     // Should eat some amount of the food you give it
-    public void eat(Food food)
+    public void feed(Food food)
             throws RemoteException;
 
 }

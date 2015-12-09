@@ -2,9 +2,11 @@ package d.food;
 
 /** A food item that can cleanly be cut into slices. */
 public class Pizza implements Food {
+    private static final long serialVersionUID = -3665524134825444256L;
+
     // Static vars
-    private final static String whatKind = "Pizza";
-    private final static int nutritionalContent = 10;
+    private static final String whatKind = "Pizza";
+    private static final int nutritionalContent = 10;
 
     // Local vars
     private int pizzaLeft = 100; // In percent

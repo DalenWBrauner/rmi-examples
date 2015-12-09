@@ -1,6 +1,8 @@
 package d.food;
 
-public interface Food {
+import java.io.Serializable;
+
+public interface Food extends Serializable {
 
     // Eat the whole thing
     public int consume();

@@ -26,8 +26,9 @@ public class Dog implements Animal {
     }
 
     @Override
-    public void eat(Food food) throws RemoteException {
-        System.out.println("A dog ate a "+ food.whatKind());
+    public void feed(Food food) throws RemoteException {
+        System.out.print("A dog ate a "+ food.whatKind());
         food.consume();
+        System.out.println(", and there was " + String.valueOf(food.isLeft()) + "% left.");
     }
 }

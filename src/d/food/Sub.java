@@ -1,9 +1,11 @@
 package d.food;
 
 public class Sub implements Food {
+    private static final long serialVersionUID = -9135577315393968638L;
+
     // Static vars
-    private final static String whatKind = "Submarine Sandwhich";
-    private final static int nutritionalContent = 100; // Healthier than pizza
+    private static final String whatKind = "Submarine Sandwhich";
+    private static final int nutritionalContent = 100; // Healthier than pizza
 
     // Local vars
     private int subLeft = 100; // In percent

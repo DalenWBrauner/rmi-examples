@@ -1,6 +1,8 @@
-package d.animals;
+package e.animals;
 
 import java.rmi.RemoteException;
+
+import e.food.Food;
 
 public class Dog implements Animal {
     private int happiness = 5;
@@ -23,4 +25,10 @@ public class Dog implements Animal {
         System.out.println("A dog was pet. Happiness: "+Integer.toString(happiness));
     }
 
+    @Override
+    public void feed(Food food) throws RemoteException {
+        System.out.print("A dog ate a "+ food.whatKind());
+        food.consume();
+        System.out.println(", and there was " + String.valueOf(food.isLeft()) + "% left.");
+    }
 }

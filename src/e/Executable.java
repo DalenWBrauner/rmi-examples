@@ -1,4 +1,4 @@
-package d;
+package e;
 
 import java.rmi.Remote;
 import java.rmi.RemoteException;
@@ -8,9 +8,14 @@ import java.rmi.server.UnicastRemoteObject;
 import java.util.ArrayList;
 import java.util.Random;
 
-import d.animals.Animal;
-import d.animals.Cat;
-import d.animals.Dog;
+import e.animals.Animal;
+import e.animals.Cat;
+import e.animals.Dog;
+import e.food.Food;
+import e.food.Garbage;
+import e.food.Pizza;
+import e.food.Raspberry;
+import e.food.Sub;
 
 public class Executable {
     public final static int portNo = 64246;
@@ -84,11 +89,12 @@ public class Executable {
                 littleHouse.add( (Animal) registry.lookup(entry));
             }
 
-            // Pet each animal in our house
+            // Feed each animal a random food item, and see what happens
             for (Animal animal : littleHouse) {
-                System.out.print("I don't know what animal this is, ");
-                System.out.println("but let's pet it!");
-                animal.pet();
+                Food meal = randomMeal();
+                System.out.println("Meal time! Come eat your "+meal.whatKind()+"!");
+                animal.feed(meal);
+                System.out.println("Alright, looks like there's "+meal.isLeft()+"% left.");
             }
 
 
@@ -96,6 +102,15 @@ public class Executable {
             System.err.println("Client exception:");
             e.printStackTrace();
         }
+    }
+
+    private static Food randomMeal() {
+        String selection = menu[chef.nextInt(menu.length)];
+
+        if (selection == "Raspberry")   return new Raspberry();
+        else if (selection == "Pizza")  return new Pizza();
+        else if (selection == "Sub")    return new Sub();
+        else                            return new Garbage();
     }
 
 }

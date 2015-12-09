@@ -1,7 +1,9 @@
-package d.animals;
+package e.animals;
 
 import java.rmi.Remote;
 import java.rmi.RemoteException;
+
+import e.food.Food;
 
 public interface Animal extends Remote {
 
@@ -15,6 +17,10 @@ public interface Animal extends Remote {
 
     // This function can do whatever it wants
     public void pet()
+            throws RemoteException;
+
+    // Should eat some amount of the food you give it
+    public void feed(Food food)
             throws RemoteException;
 
 }

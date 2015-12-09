@@ -1,4 +1,4 @@
-package d.food;
+package e.food;
 
 public class Garbage implements Food {
     private static final long serialVersionUID = -5237845250868369313L;

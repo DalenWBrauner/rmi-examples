@@ -1,4 +1,4 @@
-package d.food;
+package e.food;
 
 /** A food item that can cleanly be cut into slices. */
 public class Pizza implements Food {

@@ -1,7 +1,9 @@
-package d.animals;
+package e.animals;
 
 import java.rmi.RemoteException;
 import java.util.Random;
+
+import e.food.Food;
 
 public class Cat implements Animal {
     private Random random = new Random();
@@ -29,8 +31,25 @@ public class Cat implements Animal {
         System.out.println(catNoise()+".");
     }
 
+    @Override
+    public void feed(Food food) throws RemoteException {
+        System.out.print("A cat eats some small amount of the " + food.whatKind() + " in front of it");
+        intoTheStomach( food.consumeSome(random.nextInt(20)) );
+        System.out.print(", and there was " + String.valueOf(food.isLeft()) + "% left. ");
+        System.out.println(catNoise()+".");
+    }
+
     // Returns a random cat noise.
     private String catNoise() {
         return catNoises[random.nextInt(catNoises.length)];
+    }
+
+    private void intoTheStomach(int nutrients) {
+        stomach += nutrients;
+        if (stomach >= 100) {
+            System.out.print("A cat has overeaten, and procedes to vomit everywhere. ");
+            stomach = 0;
+            System.out.println(catNoise()+".");
+        }
     }
 }

@@ -1,9 +1,9 @@
-package g.game;
+package h.game;
 
 import java.rmi.RemoteException;
 
-import g.operations.MultiplyAmount;
-import g.operations.Operation;
+import h.operations.MultiplyAmount;
+import h.operations.Operation;
 
 public class Game {
     public final static int numPlayers = 4;

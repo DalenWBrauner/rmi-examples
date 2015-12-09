@@ -1,9 +1,9 @@
-package g.game;
+package h.game;
 
 import java.rmi.Remote;
 import java.rmi.RemoteException;
 
-import g.operations.Operation;
+import h.operations.Operation;
 
 public interface Player extends Remote {
     public Operation yourTurn(int turnNo) throws RemoteException;

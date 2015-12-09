@@ -1,4 +1,4 @@
-package f;
+package g;
 
 import java.rmi.RemoteException;
 
@@ -19,12 +19,6 @@ public class Player {
         System.out.println("'LET'S PLAY!'");
 
         // Alright time to play the game brah
-        try {
-            while(theGame.isGoing()) {
-                System.out.println("'I'll just... take my turn, here...'");
-                theGame.takeTurn(myID);
-            }
-        } catch (RemoteException e) { e.printStackTrace(); }
 
         System.out.println("'Alright, fun game. I'm done.'");
         System.out.println("'gg wp'");

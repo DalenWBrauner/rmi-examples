@@ -1,14 +1,14 @@
-package g;
+package h;
 
-import java.rmi.NotBoundException;
 import java.rmi.Remote;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
 
+import h.game.Game;
+
 public class Executable {
-    public final static String gameName = "Game";
     public final static int portNo = 64246;
 
     // Server-only
@@ -44,9 +44,9 @@ public class Executable {
         establishServerRegistry();
         System.out.println("Server started!");
 
-        Game theGame = new ServerGame();
-        register(gameName,theGame);
-        System.out.println("Server ready!");
+        // Just run a local game for now
+        Game game = new Game();
+        game.start();
     }
 
     /** Instantiate the server's registry */
@@ -62,20 +62,12 @@ public class Executable {
 
     /* Client-only methods */
 
-    private static void executeClient() throws RemoteException, NotBoundException {
+    private static void executeClient() throws RemoteException {
         // Connect to the registry
         Registry registry = LocateRegistry.getRegistry(portNo);
+
+        //Cast thing = (cast) registry.lookup(name);
         System.out.println("Client started!");
-
-        // Get the game
-        Game theGame = (Game) registry.lookup(gameName);
-
-        // Create a player and tell them to play
-        Player jerry = new Player(theGame);
-        System.out.println("Jerry is ready to play...");
-        jerry.startPlaying();
-        System.out.println("Jerry's done playing now.");
-
     }
 
 }

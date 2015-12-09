@@ -2,6 +2,7 @@ package f.game;
 
 import java.rmi.RemoteException;
 import java.util.Random;
+import java.util.concurrent.TimeUnit;
 
 import f.operations.AddAmount;
 import f.operations.DivideAmount;
@@ -21,11 +22,16 @@ public class LocalPlayer implements Player {
 
     @Override
     public Operation yourTurn(int turnNo) throws RemoteException {
-        makeDecision();
+        try { makeDecision(); }
+        catch (InterruptedException e) { e.printStackTrace(); }
         return myTurn;
     }
 
-    private void makeDecision() {
+    private void makeDecision() throws InterruptedException {
+        // Sleep some random period of time
+        synchronized (this) { TimeUnit.SECONDS.sleep(strategy.nextInt(3)); }
+
+        // Then go
         int amount;
         // Each playstyle corresponds to a different Operation
         switch (playstyle) {

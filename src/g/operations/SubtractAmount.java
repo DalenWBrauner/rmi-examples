@@ -1,4 +1,4 @@
-package f.operations;
+package g.operations;
 
 public class SubtractAmount implements Operation {
     private static final long serialVersionUID = 7496681587975659097L;

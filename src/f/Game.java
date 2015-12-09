@@ -1,4 +1,4 @@
-package f._subexamples.a;
+package f;
 
 import java.rmi.Remote;
 import java.rmi.RemoteException;

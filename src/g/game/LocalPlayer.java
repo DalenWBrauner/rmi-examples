@@ -1,14 +1,14 @@
-package f.game;
+package g.game;
 
 import java.rmi.RemoteException;
 import java.util.Random;
 import java.util.concurrent.TimeUnit;
 
-import f.operations.AddAmount;
-import f.operations.DivideAmount;
-import f.operations.MultiplyAmount;
-import f.operations.Operation;
-import f.operations.SubtractAmount;
+import g.operations.AddAmount;
+import g.operations.DivideAmount;
+import g.operations.MultiplyAmount;
+import g.operations.Operation;
+import g.operations.SubtractAmount;
 
 public class LocalPlayer implements Player {
     private Operation myTurn;

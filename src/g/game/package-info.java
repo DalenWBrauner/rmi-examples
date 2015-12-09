@@ -23,4 +23,4 @@
  *
  * Good luck.
  */
-package f.game;
+package g.game;

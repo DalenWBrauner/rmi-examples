@@ -10,4 +10,10 @@ public interface Game extends Remote {
 
     public void imReady() // Once you're ready, call this to wait on other players
             throws RemoteException;
+
+    public boolean isGoing() // Is the game over yet or not
+            throws RemoteException;
+
+    public void takeTurn(int myID) // This doesn't end until that player is dones
+            throws RemoteException;
 }

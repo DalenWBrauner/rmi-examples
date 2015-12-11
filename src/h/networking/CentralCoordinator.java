@@ -69,12 +69,11 @@ public class CentralCoordinator implements Coordinator {
         // If we DON'T know the information, we need to wait for it.
         else {
             System.out.println("Waiting for info on turn "+String.valueOf(turnNo));
-            synchronized (this) {
-                while (!allTurns.containsKey(turnNo)) {
+            while (!allTurns.containsKey(turnNo)) {
+                synchronized (this) {
                     try { wait(); }
                     catch (InterruptedException e) {}
                 }
-                notifyAll(); // But will this work again?
             }
             return whatHappened(turnNo);
         }

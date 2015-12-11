@@ -1,14 +1,13 @@
 package h.game;
 
-import java.rmi.RemoteException;
-import java.util.Random;
-import java.util.concurrent.TimeUnit;
-
 import h.operations.AddAmount;
 import h.operations.DivideAmount;
 import h.operations.MultiplyAmount;
 import h.operations.Operation;
 import h.operations.SubtractAmount;
+
+import java.rmi.RemoteException;
+import java.util.Random;
 
 public class LocalPlayer implements Player {
     private Operation myTurn;
@@ -22,6 +21,7 @@ public class LocalPlayer implements Player {
 
     @Override
     public Operation yourTurn(int turnNo) throws RemoteException {
+        System.out.println("Okay, it's my turn!");
         try { makeDecision(); }
         catch (InterruptedException e) { e.printStackTrace(); }
         return myTurn;
@@ -29,7 +29,7 @@ public class LocalPlayer implements Player {
 
     private void makeDecision() throws InterruptedException {
         // Sleep some random period of time
-        synchronized (this) { TimeUnit.SECONDS.sleep(strategy.nextInt(3)); }
+        //synchronized (this) { TimeUnit.SECONDS.sleep(strategy.nextInt(3)); }
 
         // Then go
         int amount;
@@ -52,5 +52,6 @@ public class LocalPlayer implements Player {
                 myTurn = new DivideAmount(amount);
                 break;
         }
+        System.out.println("Okay, I've made my decision!");
     }
 }

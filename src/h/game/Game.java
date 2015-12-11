@@ -1,9 +1,9 @@
 package h.game;
 
-import java.rmi.RemoteException;
-
 import h.operations.MultiplyAmount;
 import h.operations.Operation;
+
+import java.rmi.RemoteException;
 
 public class Game {
     public final static int numPlayers = 4;
@@ -20,6 +20,13 @@ public class Game {
         Player[] thePlayers = {new LocalPlayer(), new LocalPlayer(),
                                new LocalPlayer(), new LocalPlayer()};
         players = thePlayers; // Array constants can only be used in initializers
+    }
+
+    // Creates a game with predetermined players
+    public Game(Player[] thePlayers) {
+        turnNumber = 0;
+        gameNumber = startingNumber;
+        players = thePlayers;
     }
 
     public void start() {

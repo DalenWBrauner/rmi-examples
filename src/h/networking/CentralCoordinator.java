@@ -66,9 +66,11 @@ public class CentralCoordinator implements Coordinator {
     public Operation whatHappened(int turnNo) throws RemoteException {
         if (allTurns.containsKey(turnNo)) return allTurns.get(turnNo);
 
-        // If we DON'T know the information, we need to wait for it.
+        // If we DON'T know the information...
         else {
             System.out.println("Waiting for info on turn "+String.valueOf(turnNo));
+
+            // We need to wait for it.
             while (!allTurns.containsKey(turnNo)) {
                 synchronized (this) {
                     try { wait(); }

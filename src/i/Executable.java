@@ -126,6 +126,7 @@ public class Executable {
 
     }
 
+    @SuppressWarnings("unused")
     private static void executeClient2Player(String[] args) throws RemoteException, NotBoundException {
         System.out.println("Launching Client...");
         Registry registry;

@@ -31,7 +31,7 @@ public class Server implements Runnable {
         System.out.println("Server started!");
 
         // Add the coordinator
-        Coordinator theCoordinator = new CentralCoordinator();
+        Coordinator theCoordinator = new CentralCoordinator(this);
         register(Executable.coordinatorName, theCoordinator);
     }
 

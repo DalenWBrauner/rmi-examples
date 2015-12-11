@@ -1,27 +1,24 @@
 package i.networking;
 
-import i.Executable;
-
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.util.HashMap;
 
 public class CentralCoordinator implements Coordinator {
-
     private static final int playerSlots = 4;
-    private static final int[] playerIDs = new int[playerSlots];
-
+    private final int[] playerIDs = new int[playerSlots];
     private int readyPlayers;
     private int finishedPlayers;
+    private Server myOwner; // I don't like this, but it's better than global variables
 
     // Hashmap of   PlayerID -> HashMap<TurnNumber -> Decision>
     private HashMap<Integer,    HashMap<Integer,      Object>> allTurns;
 
-    public CentralCoordinator() {
+    public CentralCoordinator(Server server) {
+        myOwner = server;
         readyPlayers = 0;
         finishedPlayers = 0;
         allTurns = new HashMap<Integer, HashMap<Integer, Object>>();
-
 
         for (int i = 0; i < playerIDs.length; i++) {
             // -1 means "empty slot"
@@ -167,7 +164,7 @@ public class CentralCoordinator implements Coordinator {
         // If there aren't anymore players
         if (finishedPlayers == playerSlots) {
             // Tell the server to deregister you
-            Executable.endServer();
+            myOwner.endServer();
         }
     }
 }

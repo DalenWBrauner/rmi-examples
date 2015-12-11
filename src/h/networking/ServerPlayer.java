@@ -14,6 +14,7 @@ public class ServerPlayer implements Player {
 
     @Override
     public Operation yourTurn(int turnNo) throws RemoteException {
+        System.out.println("Asking the server what the player chose...");
         return coordinator.whatHappened(turnNo);
     }
 }

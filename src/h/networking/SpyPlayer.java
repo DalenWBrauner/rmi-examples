@@ -23,17 +23,13 @@ public class SpyPlayer implements Player {
     @Override
     public Operation yourTurn(int turnNo) throws RemoteException {
         // Tell the player it's their turn but intercept their response
-        System.out.println("Heh, time to spy on the player..!");
         Operation theirChoice = myTarget.yourTurn(turnNo);
-        System.out.println("Heh, I know what they chose!");
 
         // Report back to HQ
-        System.out.println("Time to tell the boss...");
+        System.out.println("SPY: Reporting decision to HQ...");
         myBoss.reportBack(turnNo,theirChoice);
-        System.out.println("Heh, now the boss knows!");
 
         // Continue pretending I'm the player
-        System.out.println("Time to go back into disguise...");
         return theirChoice;
     }
 

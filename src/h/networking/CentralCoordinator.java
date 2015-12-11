@@ -44,31 +44,29 @@ public class CentralCoordinator implements Coordinator {
 
     @Override
     public void imReady() throws RemoteException {
-        // I don't want this getting weird
-        synchronized (this) { readyPlayers++; }
-
-        // I just realized the following synchronized blocks don't make sense
-        // (at least not to me) but I'll leave them there if they work >~<
+        synchronized (this) { readyPlayers++; } // synchronized just to be safe
 
         // Don't progress until all players are ready
         if (readyPlayers < playerSlots) System.out.println("Waiting for other players...");
         synchronized (this) {
+            // Wait for everyone else
             while (readyPlayers < playerSlots) {
                 try { wait(); }
                 catch (InterruptedException e) {}
             }
-            notifyAll(); // But will this work again?
+
+            // In case you're the only one who escaped the while loop,
+            // you need to let everyone else know they can leave.
+            notifyAll();
         }
         System.out.println("Players ready!");
     }
 
     @Override
     public Operation whatHappened(int turnNo) throws RemoteException {
-        // If we have it, get it
         if (allTurns.containsKey(turnNo)) return allTurns.get(turnNo);
 
-        // Otherwise, don't return until we learn this information
-        // I got a bad feeling about this code
+        // If we DON'T know the information, we need to wait for it.
         else {
             System.out.println("Waiting for info on turn "+String.valueOf(turnNo));
             synchronized (this) {
@@ -85,14 +83,13 @@ public class CentralCoordinator implements Coordinator {
     @Override
     public void reportBack(int turnNo, Operation theirChoice)
             throws RemoteException {
-        System.out.println("Someone's telling me they made a decision!");
-
+        // Input their decision
+        System.out.println("Learning about turn "+String.valueOf(turnNo)+"!");
         allTurns.put(turnNo, theirChoice);
-        System.out.println("It's in, time to let everyone know...");
 
-        synchronized(this) {
-            notifyAll(); // But will this work again?
-        }
+        // Tell everyone waiting on the server that it's updated
+        System.out.println("It's in, time to let everyone know...");
+        synchronized(this) { notifyAll(); }
         System.out.println("There, done.");
     }
 }

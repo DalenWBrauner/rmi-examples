@@ -21,7 +21,7 @@ public class LocalPlayer implements Player {
 
     @Override
     public Operation yourTurn(int turnNo) throws RemoteException {
-        System.out.println("Okay, it's my turn!");
+        System.out.println("Player: Okay, it's my turn...");
         try { makeDecision(); }
         catch (InterruptedException e) { e.printStackTrace(); }
         return myTurn;
@@ -52,6 +52,6 @@ public class LocalPlayer implements Player {
                 myTurn = new DivideAmount(amount);
                 break;
         }
-        System.out.println("Okay, I've made my decision!");
+        System.out.println("Player: I've made my decision!");
     }
 }

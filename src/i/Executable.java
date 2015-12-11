@@ -124,14 +124,17 @@ public class Executable {
 
     }
 
-    private static void executeClient2Player() throws RemoteException, NotBoundException {
-        // Connect* to the registry
-        Registry registry = LocateRegistry.getRegistry(portNo);
-        System.out.println("Client started!");
-
-        // *we haven't actually connected, just created an object
-        // that will point to registry; if it doesn't actually exist,
-        // we'll find out the first time we try to USE it.
+    private static void executeClient2Player(String[] args) throws RemoteException, NotBoundException {
+        System.out.println("Launching Client...");
+        Registry registry;
+        try {
+            registry = connect(args);
+        } catch (ConnectException e) {
+            System.out.println("Client unable to connect to Server!");
+            e.printStackTrace();
+            return;
+        }
+        System.out.println("Client successfully connected to Server!");
 
         // Get the coordinator
         Coordinator coordinator = (Coordinator) registry.lookup(coordinatorName);

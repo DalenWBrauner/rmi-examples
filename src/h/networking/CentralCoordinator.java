@@ -12,17 +12,29 @@ public class CentralCoordinator implements Coordinator {
     private static final int playerSlots = 4;
     private static final int[] playerIDs = new int[playerSlots];
 
-    private int emptyPlayerSlots;
     private int readyPlayers;
     private int finishedPlayers;
 
     private HashMap<Integer,Operation> allTurns;
 
     public CentralCoordinator() {
-        emptyPlayerSlots = playerSlots;
         readyPlayers = 0;
         finishedPlayers = 0;
         allTurns = new HashMap<>();
+
+        // -1 means "empty slot"
+        for (int i = 0; i < playerIDs.length; i++) {
+            playerIDs[i] = -1;
+        }
+    }
+
+    @SuppressWarnings("unused")
+    private int emptySlots() {
+        int emptySlots = 0;
+        for (int i = 0; i < playerIDs.length; i++) {
+            if (playerIDs[i] == -1) emptySlots++;
+        }
+        return emptySlots;
     }
 
     @Override
@@ -32,23 +44,64 @@ public class CentralCoordinator implements Coordinator {
 
     @Override
     public synchronized int canIPlay() throws RemoteException {
-        // You can if we have any empty slots
-        if (emptyPlayerSlots == 0) return -1;
 
-        // Generate their ID
-        int ID = playerSlots - emptyPlayerSlots;
+        // Look for an empty slot
+        for (int i = 0; i < playerIDs.length; i++) {
+            if (playerIDs[i] == -1) {
 
-        // Assign them to that slot
-        playerIDs[ID] = ID;
-        emptyPlayerSlots--;
+                // Assign them to that slot
+                int ID = i;
+                playerIDs[i] = ID;
 
-        // Hand that back to them
-        return ID;
+                // Quit early
+                return ID;
+            }
+        }
+        // If there weren't any slots...
+        return -1;
     }
 
     @Override
-    public void imReady() throws RemoteException {
-        synchronized (this) { readyPlayers++; } // synchronized just to be safe
+    public synchronized int[] canIPlay(int numPlayers) throws RemoteException {
+        int[] foundIDs = new int[numPlayers];
+        int IDsNeeded = numPlayers;
+
+        // Let's hunt down some empty slots!
+        int i = 0;
+        while (i < playerIDs.length && IDsNeeded > 0) {
+
+            // Take note of any open IDs we find
+            if (playerIDs[i] == -1) {
+                foundIDs[(numPlayers - IDsNeeded)] = i;
+                IDsNeeded--;
+            }
+
+            // (We're looping through playerIDs, by the way)
+            i++;
+        }
+
+        // If we found enough IDs,
+        if (IDsNeeded == 0) {
+            // Reserve them
+            for (int ID : foundIDs) playerIDs[ID] = ID;
+            return foundIDs;
+
+        // If not, you can't play
+        } else {
+            int[] negatory = {-1};
+            return negatory;
+        }
+    }
+
+    @Override
+    public void imReady(int ID) throws RemoteException {
+        int[] IDs = {ID};
+        imReady(IDs);
+    }
+
+    @Override
+    public void imReady(int[] IDs) throws RemoteException {
+        synchronized (this) { readyPlayers += IDs.length; } // synchronized just to be safe
 
         // Don't progress until all players are ready
         if (readyPlayers < playerSlots) System.out.println("Waiting for other players...");
@@ -96,9 +149,15 @@ public class CentralCoordinator implements Coordinator {
         synchronized(this) { notifyAll(); }
     }
 
+    @Override
+    public synchronized void goodGame(int[] IDs) throws RemoteException, NotBoundException {
+        for (int ID : IDs) {
+            goodGame(ID);
+        }
+    }
 
     @Override
-    public synchronized void goodGame(int ID) throws RemoteException, NotBoundException {
+    public void goodGame(int ID) throws RemoteException, NotBoundException {
         // For now, we're going to assume this method only
         // gets called when the game is over, not if someone
         // decides to duck out early.

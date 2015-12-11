@@ -15,8 +15,17 @@ public interface Coordinator extends Remote {
     public int canIPlay()
             throws RemoteException;
 
+    /** Returns an array of IDs if you're given a slot,
+     * returns a length-1 array of negatives if the game is full. */
+    public int[] canIPlay(int numPlayers)
+            throws RemoteException;
+
     /** This function doesn't return control until the game begins! */
-    public void imReady()
+    public void imReady(int ID)
+            throws RemoteException;
+
+    /** imReady() but for multiple players. */
+    public void imReady(int[] IDs)
             throws RemoteException;
 
 //  /** Pass in your ID, confirming you no longer wish to play.
@@ -34,8 +43,14 @@ public interface Coordinator extends Remote {
             throws RemoteException;
 
     /** Returns the maximum number of players in a game. */
-    int maxPlayers() throws RemoteException;
+    int maxPlayers()
+            throws RemoteException;
 
     /** Informs the coordinator you're done playing. */
-    public void goodGame(int ID) throws RemoteException, NotBoundException;
+    public void goodGame(int ID)
+            throws RemoteException, NotBoundException;
+
+    /** Informs the coordinator a number of players are done playing. */
+    public void goodGame(int[] ID)
+            throws RemoteException, NotBoundException;
 }

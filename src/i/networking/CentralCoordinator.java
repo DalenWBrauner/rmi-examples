@@ -14,16 +14,20 @@ public class CentralCoordinator implements Coordinator {
     private int readyPlayers;
     private int finishedPlayers;
 
-    private HashMap<Object,Object> allTurns;
+    // Hashmap of   PlayerID -> HashMap<TurnNumber -> Decision>
+    private HashMap<Integer,    HashMap<Integer,      Object>> allTurns;
 
     public CentralCoordinator() {
         readyPlayers = 0;
         finishedPlayers = 0;
-        allTurns = new HashMap<>();
+        allTurns = new HashMap<Integer, HashMap<Integer, Object>>();
 
-        // -1 means "empty slot"
+
         for (int i = 0; i < playerIDs.length; i++) {
+            // -1 means "empty slot"
             playerIDs[i] = -1;
+            // Gotta add those hashmaps
+            allTurns.put(i, new HashMap<Integer, Object>());
         }
     }
 
@@ -119,30 +123,28 @@ public class CentralCoordinator implements Coordinator {
     }
 
     @Override
-    public Object whatHappened(int turnNo) throws RemoteException {
-        if (allTurns.containsKey(turnNo)) return allTurns.get(turnNo);
+    public Object whatHappened(int playerN, int turnN) throws RemoteException {
+        // Get all of the player's turns
+        HashMap<Integer, Object> playerTurns = allTurns.get(playerN);
 
-        // If we DON'T know the information...
-        else {
-            System.out.println("Waiting for info on turn "+String.valueOf(turnNo));
-
-            // We need to wait for it.
-            while (!allTurns.containsKey(turnNo)) {
-                synchronized (this) {
-                    try { wait(); }
-                    catch (InterruptedException e) {}
-                }
+        // If we don't know what they did on that turn,
+        // We need to wait until we do.
+        if (!playerTurns.containsKey(turnN)) System.out.println("Waiting for info on turn "+String.valueOf(turnN));
+        while (!playerTurns.containsKey(turnN)) {
+            synchronized (this) {
+                try { wait(); }
+                catch (InterruptedException e) {}
             }
-            return whatHappened(turnNo);
         }
+        return playerTurns.get(turnN);
     }
 
     @Override
-    public void reportBack(int turnNo, Object theirChoice)
+    public void reportBack(int playerN, int turnN, Object theirChoice)
             throws RemoteException {
         // Input their decision
-        System.out.println("Learning about turn "+String.valueOf(turnNo)+"!");
-        allTurns.put(turnNo, theirChoice);
+        System.out.println("Learning about player "+String.valueOf(playerN)+"'s turn "+String.valueOf(turnN)+"!");
+        allTurns.get(playerN).put(turnN, theirChoice);
 
         // Tell everyone waiting on the server that it's updated
         synchronized(this) { notifyAll(); }

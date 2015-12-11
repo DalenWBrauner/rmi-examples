@@ -84,12 +84,12 @@ public class Executable {
 
         // Ask to play
         System.out.println("Can I play?");
-        int ID = coordinator.canIPlay();
-        if (ID < 0) {
+        int myID = coordinator.canIPlay();
+        if (myID < 0) {
             System.out.println("Aww, the game was full...");
             return; // If I can't, leave
         }
-        System.out.println("YES! I'm player "+String.valueOf(ID)+"!");
+        System.out.println("YES! I'm player "+String.valueOf(myID)+"!");
 
         // Create all of our players
         int maxPlayers = coordinator.maxPlayers();
@@ -97,13 +97,15 @@ public class Executable {
         for (int i = 0; i < maxPlayers; i++) {
 
             // If it's us, create a local wrapped in a spy
-            if (i == ID) {
+            if (i == myID) {
                 players[i] = new SpyPlayer(coordinator,
-                        new LocalPlayer());
+                        new LocalPlayer(), i);
+                System.out.println("Creating Spy with ID "+String.valueOf(i));
 
             } else {
                 // Create server players
-                players[i] = new ServerPlayer(coordinator);
+                players[i] = new ServerPlayer(coordinator, i);
+                System.out.println("Creating ServerPlayer with ID "+String.valueOf(i));
             }
         }
 
@@ -112,7 +114,7 @@ public class Executable {
 
         // Make sure everyone's ready...
         System.out.println("Ready...");
-        coordinator.imReady(ID);
+        coordinator.imReady(myID);
 
         // Then START!
         System.out.println("PLAYING!");
@@ -120,7 +122,7 @@ public class Executable {
 
         // Once the game is over
         System.out.println("Good game, everyone!");
-        coordinator.goodGame(ID);
+        coordinator.goodGame(myID);
 
     }
 
@@ -141,18 +143,18 @@ public class Executable {
 
         // Some prep
         int maxPlayers = coordinator.maxPlayers();
-        int[] IDs = new int[2];
+        int[] myIDs = new int[2];
 
         // Startup 2 players
         for (int player = 0; player < 2; player++) {
             // Ask to play
             System.out.println("Can I play?");
-            IDs[player] = coordinator.canIPlay();
-            if (IDs[player] < 0) {
+            myIDs[player] = coordinator.canIPlay();
+            if (myIDs[player] < 0) {
                 System.out.println("Aww, the game was full...");
                 return; // If I can't, leave
             }
-            System.out.println("YES! I'm player "+String.valueOf(IDs[player])+"!");
+            System.out.println("YES! I'm player "+String.valueOf(myIDs[player])+"!");
         }
 
         // Create all of our players
@@ -161,13 +163,13 @@ public class Executable {
         for (int i = 0; i < maxPlayers; i++) {
 
             // If it's us, create a local wrapped in a spy
-            if (i == IDs[0] || i == IDs[1]) {
+            if (i == myIDs[0] || i == myIDs[1]) {
                 players[i] = new SpyPlayer(coordinator,
-                        new LocalPlayer());
+                        new LocalPlayer(), i);
 
             } else {
                 // Create server players
-                players[i] = new ServerPlayer(coordinator);
+                players[i] = new ServerPlayer(coordinator, i);
             }
         }
 
@@ -176,7 +178,7 @@ public class Executable {
 
         // Make sure everyone's ready...
         System.out.println("Ready...");
-        coordinator.imReady(IDs);
+        coordinator.imReady(myIDs);
 
         // Then START!
         System.out.println("PLAYING!");
@@ -184,6 +186,6 @@ public class Executable {
 
         // Once the game is over
         System.out.println("Good game, everyone!");
-        coordinator.goodGame(IDs);
+        coordinator.goodGame(myIDs);
     }
 }

@@ -13,6 +13,8 @@ import java.rmi.RemoteException;
 public class SpyPlayer implements PlayerRepresentative {
     private Coordinator myBoss;
     private PlayerRepresentative myTarget;
+    private final int playerNumber;
+    private int questionNumber;
 
     /** Creates a Spy that reports all of the player's actions back
      * to the coordinator.
@@ -20,171 +22,184 @@ public class SpyPlayer implements PlayerRepresentative {
      * @param boss The Coordinator receiving the player's actions.
      * @param target The Player being spied on.
      */
-    public SpyPlayer(Coordinator boss, PlayerRepresentative target) {
+    public SpyPlayer(Coordinator boss, PlayerRepresentative target, int playerID) {
         myBoss = boss;
         myTarget = target;
+        questionNumber = 0;
+        playerNumber = playerID;
     }
 
     @Override
-    public SpellID getSpellCast(int questionNumber, SpellID[] availableSpells)
+    public SpellID getSpellCast(SpellID[] availableSpells)
             throws RemoteException {
 
         // Tell the player it's their turn but intercept their response
-        SpellID theirChoice = myTarget.getSpellCast(questionNumber, availableSpells);
+        SpellID theirChoice = myTarget.getSpellCast(availableSpells);
 
         // Report back to HQ
         System.out.println("SPY: Reporting decision to HQ...");
-        myBoss.reportBack(questionNumber, theirChoice);
+        myBoss.reportBack(playerNumber, questionNumber, theirChoice);
+        questionNumber++;
 
         // Continue pretending I'm the player
         return theirChoice;
     }
 
     @Override
-    public int getUsersRoll(int questionNumber)
+    public int getUsersRoll()
             throws RemoteException {
 
         // Tell the player it's their turn but intercept their response
-        int theirChoice = myTarget.getUsersRoll(questionNumber);
+        int theirChoice = myTarget.getUsersRoll();
 
         // Report back to HQ
         System.out.println("SPY: Reporting decision to HQ...");
-        myBoss.reportBack(questionNumber, theirChoice);
+        myBoss.reportBack(playerNumber, questionNumber, theirChoice);
+        questionNumber++;
 
         // Continue pretending I'm the player
         return theirChoice;
     }
 
     @Override
-    public CardinalDirection forkInTheRoad(int questionNumber,
-            CardinalDirection[] availableDirections) throws RemoteException {
-
-        // Tell the player it's their turn but intercept their response
-        CardinalDirection theirChoice = myTarget.forkInTheRoad(questionNumber,
-                availableDirections);
-
-        // Report back to HQ
-        System.out.println("SPY: Reporting decision to HQ...");
-        myBoss.reportBack(questionNumber, theirChoice);
-
-        // Continue pretending I'm the player
-        return theirChoice;
-    }
-
-    @Override
-    public boolean buyThisTile(int questionNumber, PropertyTile tileForPurchase)
+    public CardinalDirection forkInTheRoad(CardinalDirection[] availableDirections)
             throws RemoteException {
 
         // Tell the player it's their turn but intercept their response
-        boolean theirChoice = myTarget.buyThisTile(questionNumber, tileForPurchase);
+        CardinalDirection theirChoice = myTarget.forkInTheRoad(availableDirections);
 
         // Report back to HQ
         System.out.println("SPY: Reporting decision to HQ...");
-        myBoss.reportBack(questionNumber, theirChoice);
+        myBoss.reportBack(playerNumber, questionNumber, theirChoice);
+        questionNumber++;
 
         // Continue pretending I'm the player
         return theirChoice;
     }
 
     @Override
-    public CardShape placeWhichCard(int questionNumber) throws RemoteException {
-
-        // Tell the player it's their turn but intercept their response
-        CardShape theirChoice = myTarget.placeWhichCard(questionNumber);
-
-        // Report back to HQ
-        System.out.println("SPY: Reporting decision to HQ...");
-        myBoss.reportBack(questionNumber, theirChoice);
-
-        // Continue pretending I'm the player
-        return theirChoice;
-    }
-
-    @Override
-    public CardShape swapCardOnThisTile(int questionNumber,
-            PropertyTile tileForSwapping) throws RemoteException {
-
-        // Tell the player it's their turn but intercept their response
-        CardShape theirChoice = myTarget.swapCardOnThisTile(questionNumber,
-                tileForSwapping);
-
-        // Report back to HQ
-        System.out.println("SPY: Reporting decision to HQ...");
-        myBoss.reportBack(questionNumber, theirChoice);
-
-        // Continue pretending I'm the player
-        return theirChoice;
-    }
-
-    @Override
-    public Tile swapCardOnWhichTile(int questionNumber) throws RemoteException {
-
-        // Tell the player it's their turn but intercept their response
-        Tile theirChoice = myTarget.swapCardOnWhichTile(questionNumber);
-
-        // Report back to HQ
-        System.out.println("SPY: Reporting decision to HQ...");
-        myBoss.reportBack(questionNumber, theirChoice);
-
-        // Continue pretending I'm the player
-        return theirChoice;
-    }
-
-    @Override
-    public Tile upgradeWhichTile(int questionNumber,
-            PropertyTile[] upgradeableTiles) throws RemoteException {
-
-        // Tell the player it's their turn but intercept their response
-        Tile theirChoice = myTarget.upgradeWhichTile(questionNumber, upgradeableTiles);
-
-        // Report back to HQ
-        System.out.println("SPY: Reporting decision to HQ...");
-        myBoss.reportBack(questionNumber, theirChoice);
-
-        // Continue pretending I'm the player
-        return theirChoice;
-    }
-
-    @Override
-    public int upgradeToWhatLevel(int questionNumber, PropertyTile upgradingTile)
+    public boolean buyThisTile(PropertyTile tileForPurchase)
             throws RemoteException {
 
         // Tell the player it's their turn but intercept their response
-        int theirChoice = myTarget.upgradeToWhatLevel(questionNumber, upgradingTile);
+        boolean theirChoice = myTarget.buyThisTile(tileForPurchase);
 
         // Report back to HQ
         System.out.println("SPY: Reporting decision to HQ...");
-        myBoss.reportBack(questionNumber, theirChoice);
+        myBoss.reportBack(playerNumber, questionNumber, theirChoice);
+        questionNumber++;
 
         // Continue pretending I'm the player
         return theirChoice;
     }
 
     @Override
-    public PropertyTile sellWhichTile(int questionNumber, PlayerID sellingPlayer)
+    public CardShape placeWhichCard()
             throws RemoteException {
 
         // Tell the player it's their turn but intercept their response
-        PropertyTile theirChoice = myTarget.sellWhichTile(questionNumber, sellingPlayer);
+        CardShape theirChoice = myTarget.placeWhichCard();
 
         // Report back to HQ
         System.out.println("SPY: Reporting decision to HQ...");
-        myBoss.reportBack(questionNumber, theirChoice);
+        myBoss.reportBack(playerNumber, questionNumber, theirChoice);
+        questionNumber++;
 
         // Continue pretending I'm the player
         return theirChoice;
     }
 
     @Override
-    public PlayerID castOnPlayer(int questionNumber, SpellID spellCast)
+    public CardShape swapCardOnThisTile(PropertyTile tileForSwapping)
             throws RemoteException {
 
         // Tell the player it's their turn but intercept their response
-        PlayerID theirChoice = myTarget.castOnPlayer(questionNumber, spellCast);
+        CardShape theirChoice = myTarget.swapCardOnThisTile(tileForSwapping);
 
         // Report back to HQ
         System.out.println("SPY: Reporting decision to HQ...");
-        myBoss.reportBack(questionNumber, theirChoice);
+        myBoss.reportBack(playerNumber, questionNumber, theirChoice);
+        questionNumber++;
+
+        // Continue pretending I'm the player
+        return theirChoice;
+    }
+
+    @Override
+    public Tile swapCardOnWhichTile()
+            throws RemoteException {
+
+        // Tell the player it's their turn but intercept their response
+        Tile theirChoice = myTarget.swapCardOnWhichTile();
+
+        // Report back to HQ
+        System.out.println("SPY: Reporting decision to HQ...");
+        myBoss.reportBack(playerNumber, questionNumber, theirChoice);
+        questionNumber++;
+
+        // Continue pretending I'm the player
+        return theirChoice;
+    }
+
+    @Override
+    public Tile upgradeWhichTile(PropertyTile[] upgradeableTiles)
+            throws RemoteException {
+
+        // Tell the player it's their turn but intercept their response
+        Tile theirChoice = myTarget.upgradeWhichTile(upgradeableTiles);
+
+        // Report back to HQ
+        System.out.println("SPY: Reporting decision to HQ...");
+        myBoss.reportBack(playerNumber, questionNumber, theirChoice);
+        questionNumber++;
+
+        // Continue pretending I'm the player
+        return theirChoice;
+    }
+
+    @Override
+    public int upgradeToWhatLevel(PropertyTile upgradingTile)
+            throws RemoteException {
+
+        // Tell the player it's their turn but intercept their response
+        int theirChoice = myTarget.upgradeToWhatLevel(upgradingTile);
+
+        // Report back to HQ
+        System.out.println("SPY: Reporting decision to HQ...");
+        myBoss.reportBack(playerNumber, questionNumber, theirChoice);
+        questionNumber++;
+
+        // Continue pretending I'm the player
+        return theirChoice;
+    }
+
+    @Override
+    public PropertyTile sellWhichTile(PlayerID sellingPlayer)
+            throws RemoteException {
+
+        // Tell the player it's their turn but intercept their response
+        PropertyTile theirChoice = myTarget.sellWhichTile(sellingPlayer);
+
+        // Report back to HQ
+        System.out.println("SPY: Reporting decision to HQ...");
+        myBoss.reportBack(playerNumber, questionNumber, theirChoice);
+        questionNumber++;
+
+        // Continue pretending I'm the player
+        return theirChoice;
+    }
+
+    @Override
+    public PlayerID castOnPlayer(SpellID spellCast)
+            throws RemoteException {
+
+        // Tell the player it's their turn but intercept their response
+        PlayerID theirChoice = myTarget.castOnPlayer(spellCast);
+
+        // Report back to HQ
+        System.out.println("SPY: Reporting decision to HQ...");
+        myBoss.reportBack(playerNumber, questionNumber, theirChoice);
+        questionNumber++;
 
         // Continue pretending I'm the player
         return theirChoice;

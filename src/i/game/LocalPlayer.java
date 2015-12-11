@@ -49,53 +49,53 @@ public class LocalPlayer implements PlayerRepresentative {
     // Public Methods
 
     @Override
-    public SpellID getSpellCast(int q, SpellID[] availableSpells) {
+    public SpellID getSpellCast(SpellID[] availableSpells) {
         return anyRandomSpell();
     }
 
     @Override
-    public int getUsersRoll(int q) { return r.nextInt(6) + 1; }
+    public int getUsersRoll() { return r.nextInt(6) + 1; }
 
     @Override
-    public CardinalDirection forkInTheRoad(int q,CardinalDirection[] availableDirections) {
+    public CardinalDirection forkInTheRoad(CardinalDirection[] availableDirections) {
         return anyRandomDirection();
     }
 
     @Override
-    public boolean buyThisTile(int q,PropertyTile tileForPurchase) { return true; }
+    public boolean buyThisTile(PropertyTile tileForPurchase) { return true; }
 
     @Override
-    public CardShape placeWhichCard(int q) {
+    public CardShape placeWhichCard() {
         return anyRandomCard();
     }
 
     @Override
-    public CardShape swapCardOnThisTile(int q,PropertyTile tileForSwapping) {
+    public CardShape swapCardOnThisTile(PropertyTile tileForSwapping) {
         return anyRandomCard();
     }
 
     @Override
-    public Tile swapCardOnWhichTile(int q) {
+    public Tile swapCardOnWhichTile() {
         return generateRandomPropertyTile();
     }
 
     @Override
-    public Tile upgradeWhichTile(int q, PropertyTile[] upgradeableTiles) {
+    public Tile upgradeWhichTile(PropertyTile[] upgradeableTiles) {
         return generateRandomPropertyTile();
     }
 
     @Override
-    public int upgradeToWhatLevel(int q, PropertyTile upgradingTile) {
+    public int upgradeToWhatLevel(PropertyTile upgradingTile) {
         return r.nextInt(5) + 1;
     }
 
     @Override
-    public PropertyTile sellWhichTile(int q, PlayerID sellingPlayer) {
+    public PropertyTile sellWhichTile(PlayerID sellingPlayer) {
         return generateRandomPropertyTile();
     }
 
     @Override
-    public PlayerID castOnPlayer(int q, SpellID spellCast) {
+    public PlayerID castOnPlayer(SpellID spellCast) {
         return anyRandomPlayer();
     }
 }

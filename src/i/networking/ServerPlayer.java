@@ -12,9 +12,13 @@ import java.rmi.RemoteException;
 
 public class ServerPlayer implements PlayerRepresentative {
     private Coordinator coordinator;
+    private int questionNumber;
+    private int playerNumber;
 
-    public ServerPlayer(Coordinator c) {
+    public ServerPlayer(Coordinator c, int playerID) {
         coordinator = c;
+        playerNumber = playerID;
+        questionNumber = 0;
     }
 
 //    @Override
@@ -24,76 +28,99 @@ public class ServerPlayer implements PlayerRepresentative {
 //    }
 
     @Override
-    public SpellID getSpellCast(int questionNumber, SpellID[] availableSpells)
+    public SpellID getSpellCast(SpellID[] availableSpells)
             throws RemoteException {
         System.out.println("getSpellCast Asking the server what the player chose...");
-        return (SpellID) coordinator.whatHappened(questionNumber);
+        SpellID result = (SpellID) coordinator.whatHappened(playerNumber, questionNumber);
+        questionNumber++;
+        return result;
     }
 
     @Override
-    public int getUsersRoll(int questionNumber) throws RemoteException {
+    public int getUsersRoll() throws RemoteException {
         System.out.println("getUsersRoll Asking the server what the player chose...");
-        return (int) coordinator.whatHappened(questionNumber);
+        int result = (int) coordinator.whatHappened(playerNumber, questionNumber);
+        questionNumber++;
+        return result;
     }
 
     @Override
-    public CardinalDirection forkInTheRoad(int questionNumber,
-            CardinalDirection[] availableDirections) throws RemoteException {
+    public CardinalDirection forkInTheRoad(CardinalDirection[] availableDirections) throws RemoteException {
         System.out.println("forkInTheRoad Asking the server what the player chose...");
-        return (CardinalDirection) coordinator.whatHappened(questionNumber);
+        CardinalDirection result = (CardinalDirection) coordinator.whatHappened(playerNumber, questionNumber);
+        questionNumber++;
+        return result;
     }
 
     @Override
-    public boolean buyThisTile(int questionNumber, PropertyTile tileForPurchase)
+    public boolean buyThisTile(PropertyTile tileForPurchase)
             throws RemoteException {
         System.out.println("buyThisTile Asking the server what the player chose...");
-        return (boolean) coordinator.whatHappened(questionNumber);
+        boolean result = (boolean) coordinator.whatHappened(playerNumber, questionNumber);
+        questionNumber++;
+        return result;
     }
 
     @Override
-    public CardShape placeWhichCard(int questionNumber) throws RemoteException {
+    public CardShape placeWhichCard()
+            throws RemoteException {
         System.out.println("placeWhichCard Asking the server what the player chose...");
-        return (CardShape) coordinator.whatHappened(questionNumber);
+        CardShape result = (CardShape) coordinator.whatHappened(playerNumber, questionNumber);
+        questionNumber++;
+        return result;
     }
 
     @Override
-    public CardShape swapCardOnThisTile(int questionNumber,
-            PropertyTile tileForSwapping) throws RemoteException {
+    public CardShape swapCardOnThisTile(PropertyTile tileForSwapping)
+                    throws RemoteException {
         System.out.println("swapCardOnThisTile Asking the server what the player chose...");
-        return (CardShape) coordinator.whatHappened(questionNumber);
+        CardShape result = (CardShape) coordinator.whatHappened(playerNumber, questionNumber);
+        questionNumber++;
+        return result;
     }
 
     @Override
-    public Tile swapCardOnWhichTile(int questionNumber) throws RemoteException {
+    public Tile swapCardOnWhichTile()
+            throws RemoteException {
         System.out.println("swapCardOnWhichTile Asking the server what the player chose...");
-        return (Tile) coordinator.whatHappened(questionNumber);
+        Tile result = (Tile) coordinator.whatHappened(playerNumber, questionNumber);
+        questionNumber++;
+        return result;
     }
 
     @Override
-    public Tile upgradeWhichTile(int questionNumber,
-            PropertyTile[] upgradeableTiles) throws RemoteException {
+    public Tile upgradeWhichTile(PropertyTile[] upgradeableTiles)
+            throws RemoteException {
         System.out.println("upgradeWhichTileAsking the server what the player chose...");
-        return (Tile) coordinator.whatHappened(questionNumber);
+        Tile result = (Tile) coordinator.whatHappened(playerNumber, questionNumber);
+        questionNumber++;
+        return result;
     }
 
     @Override
-    public int upgradeToWhatLevel(int questionNumber, PropertyTile upgradingTile)
+    public int upgradeToWhatLevel(PropertyTile upgradingTile)
             throws RemoteException {
         System.out.println("upgradeToWhatLevel Asking the server what the player chose...");
-        return (int) coordinator.whatHappened(questionNumber);
+        int result = (int) coordinator.whatHappened(playerNumber, questionNumber);
+        questionNumber++;
+        return result;
     }
 
     @Override
-    public PropertyTile sellWhichTile(int questionNumber, PlayerID sellingPlayer)
+    public PropertyTile sellWhichTile(PlayerID sellingPlayer)
             throws RemoteException {
         System.out.println("sellWhichTile Asking the server what the player chose...");
-        return (PropertyTile) coordinator.whatHappened(questionNumber);
+        PropertyTile result = (PropertyTile) coordinator.whatHappened(playerNumber, questionNumber);
+        questionNumber++;
+        return result;
     }
 
     @Override
-    public PlayerID castOnPlayer(int questionNumber, SpellID spellCast)
+    public PlayerID castOnPlayer(SpellID spellCast)
             throws RemoteException {
         System.out.println("castOnPlayer Asking the server what the player chose...");
-        return (PlayerID) coordinator.whatHappened(questionNumber);
+        PlayerID result = (PlayerID) coordinator.whatHappened(playerNumber, questionNumber);
+        questionNumber++;
+        return result;
     }
 }

@@ -15,7 +15,6 @@ public class Game {
     public final static int numPlayers = 4;
     private final PlayerRepresentative[] players;
     private int turnNumber;
-    private int questionNumber;
 
     // Default responses
     private static final int defaultResponse1               = 0;
@@ -29,7 +28,6 @@ public class Game {
 
     // Creates a game with all-local players
     public Game() {
-        questionNumber = 0;
         turnNumber = 0;
         PlayerRepresentative[] thePlayers = {new LocalPlayer(), new LocalPlayer(),
                                              new LocalPlayer(), new LocalPlayer()};
@@ -38,7 +36,6 @@ public class Game {
 
     // Creates a game with predetermined players
     public Game(PlayerRepresentative[] thePlayers) {
-        questionNumber = 0;
         turnNumber = 0;
         players = thePlayers;
     }
@@ -71,24 +68,16 @@ public class Game {
         CardShape response7         = defaultResponse7;
         CardinalDirection response8 = defaultResponse8;
         try {
-            response1 = player.getUsersRoll(questionNumber);
-            questionNumber++;
-            response2 = player.buyThisTile(questionNumber, null);
-            questionNumber++;
+            response1 = player.getUsersRoll();
+            response2 = player.buyThisTile(null);
 
-            response3 = player.upgradeWhichTile(questionNumber, null);
-            questionNumber++;
-            response4 = player.sellWhichTile(questionNumber, null);
-            questionNumber++;
+            response3 = player.upgradeWhichTile(null);
+            response4 = player.sellWhichTile(null);
 
-            response5 = player.castOnPlayer(questionNumber, null);
-            questionNumber++;
-            response6 = player.getSpellCast(questionNumber, null);
-            questionNumber++;
-            response7 = player.placeWhichCard(questionNumber);
-            questionNumber++;
-            response8 = player.forkInTheRoad(questionNumber, null);
-            questionNumber++;
+            response5 = player.castOnPlayer(null);
+            response6 = player.getSpellCast(null);
+            response7 = player.placeWhichCard();
+            response8 = player.forkInTheRoad(null);
         } catch (RemoteException e) {
             e.printStackTrace();
         }

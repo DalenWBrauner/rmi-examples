@@ -32,12 +32,12 @@ public interface Coordinator extends Remote {
 //         throws RemoteException;
 
     /** Someone informs you of what's happening on a given turn. */
-    public void reportBack(int turnNo, Object theirChoice)
+    public void reportBack(int playerN, int turnN, Object theirChoice)
             throws RemoteException;
 
     /** Returns the operation that occured on a given turn and
      * blocks until that information is available. */
-    public Object whatHappened(int turnNo)
+    public Object whatHappened(int playerN, int turnN)
             throws RemoteException;
 
     /** Returns the maximum number of players in a game. */

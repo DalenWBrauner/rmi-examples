@@ -8,6 +8,8 @@ import i.networking.Server;
 import i.networking.ServerPlayer;
 import i.networking.SpyPlayer;
 
+import java.rmi.AccessException;
+import java.rmi.ConnectException;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
@@ -20,12 +22,14 @@ public class Executable {
 
     public static void main(String[] args) {
         // If we have arguments, execute the server too
-        if (args.length > 0) executeServer();
+        if (args.length > 0 && ("-s".equals(args[0]) || "--server".equals(args[0]))) {
+            executeServer();
+        }
 
         // Launch the Client
         try {
-            executeClient();
-            //executeClient2Player();
+            executeClient(args);
+            //executeClient2Player(args);
         } catch (Exception e) {
             System.err.println("Client exception:");
             e.printStackTrace();
@@ -33,6 +37,7 @@ public class Executable {
     }
 
     private static void executeServer() {
+        System.out.println("Launching Server...");
         server = new Server();
         server.run();
     }
@@ -41,14 +46,38 @@ public class Executable {
         server.endServer();
     }
 
-    private static void executeClient() throws RemoteException, NotBoundException {
-        // Connect* to the registry
-        Registry registry = LocateRegistry.getRegistry(portNo);
-        System.out.println("Client started!");
+    private static Registry connect(String[] args)
+            throws AccessException, ConnectException, RemoteException {
+        // Establish a registry
+        Registry registry;
 
-        // *we haven't actually connected, just created an object
-        // that will point to registry; if it doesn't actually exist,
-        // we'll find out the first time we try to USE it.
+        // If they use the -c or --client arguments, assume the next argument is an IP address
+        if (args.length > 1 && ("-c".equals(args[0]) || "--client".equals(args[0]))) {
+            System.out.println("Connecting to "+args[1]+"...");
+            registry = LocateRegistry.getRegistry(args[1], portNo);
+        } else {
+            System.out.println("Connecting to localhost...");
+            registry = LocateRegistry.getRegistry(portNo);
+        }
+        // NOTE: we haven't actually connected to the registry, just
+        // created an object that points to it.
+
+        // Here's the part where we actually connect.
+        registry.list(); // This will fail if there's no registry to connect to.
+        return registry;
+    }
+
+    private static void executeClient(String[] args) throws RemoteException, NotBoundException {
+        System.out.println("Launching Client...");
+        Registry registry;
+        try {
+            registry = connect(args);
+        } catch (ConnectException e) {
+            System.out.println("Client unable to connect to Server!");
+            e.printStackTrace();
+            return;
+        }
+        System.out.println("Client successfully connected to Server!");
 
         // Get the coordinator
         Coordinator coordinator = (Coordinator) registry.lookup(coordinatorName);

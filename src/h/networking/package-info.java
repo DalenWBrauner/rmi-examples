@@ -9,5 +9,8 @@
  * Players successfully upload their decisions to the server.
  * Players successfully wait if they ask the server for a player's actions before the
  * server knows the answer.
+ *
+ * Package H also demonstrates a situation in which there are only 2 Clients, each with
+ * 2 local players, playing all together.
  */
 package h.networking;

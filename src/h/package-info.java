@@ -1,8 +1,8 @@
 /**
  * @author Dalen W. Brauner
  *
- * This package aims to demonstrate 4 'Clients' all connected to one another, all while
- * each one believes that it is the only client running.
+ * This package demonstrates 4 Players all playing together, some on
+ * different clients, some not.
  *
  */
 package h;

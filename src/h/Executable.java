@@ -20,8 +20,7 @@ public class Executable {
     public final static String coordinatorName = "Coordinator";
     public final static int portNo = 64246;
     private static Registry serverRegistry;
-    private static Coordinator theCoordinator;
-    private static ArrayList<Remote> stubs = new ArrayList<>();
+    private static ArrayList<Remote> registeredObjects = new ArrayList<>();
 
     public static void main(String[] args) {
         try {
@@ -44,8 +43,7 @@ public class Executable {
         System.out.println("Server started!");
 
         // Add the coordinator
-        //Coordinator theCoordinator = new CentralCoordinator();
-        theCoordinator = new CentralCoordinator();
+        Coordinator theCoordinator = new CentralCoordinator();
         register(coordinatorName, theCoordinator);
     }
 
@@ -58,7 +56,7 @@ public class Executable {
     private static void register(String name, Remote remoteObject) throws RemoteException {
         Remote stub = UnicastRemoteObject.exportObject(remoteObject,0);
         serverRegistry.rebind(name, stub);
-        stubs.add(stub); // We'll need this to unexport it later
+        registeredObjects.add(remoteObject); // We'll need this to unexport it later
     }
 
     /* Client-only methods */
@@ -120,22 +118,12 @@ public class Executable {
     public static void endServer() throws RemoteException, NotBoundException {
         System.out.println("Server exiting...");
 
-//        // Clean up our stubs
-//        System.out.println("Cleaning stubs...");
-//        for (Remote stub : stubs) {
-//            UnicastRemoteObject.unexportObject(stub, false);
-//        }
-
-        // Remove our coordinator from the registry
-        System.out.println("Unbinding coordinator...");
-        serverRegistry.unbind(coordinatorName);
-
-        // Unexport the coordinator
-        System.out.println("Unexporting coordinator...");
-        UnicastRemoteObject.unexportObject(theCoordinator, true);
+        // Clean out our registry
+        for (Remote object : registeredObjects) {
+            UnicastRemoteObject.unexportObject(object, true);
+        }
 
         // Unexport the registry itself
-        System.out.println("Unbinding registry...");
         UnicastRemoteObject.unexportObject(serverRegistry, true);
     }
 }

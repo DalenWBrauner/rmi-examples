@@ -93,9 +93,7 @@ public class CentralCoordinator implements Coordinator {
         allTurns.put(turnNo, theirChoice);
 
         // Tell everyone waiting on the server that it's updated
-        System.out.println("It's in, time to let everyone know...");
         synchronized(this) { notifyAll(); }
-        System.out.println("There, done.");
     }
 
 

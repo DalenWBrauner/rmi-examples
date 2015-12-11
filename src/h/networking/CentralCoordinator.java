@@ -1,7 +1,9 @@
 package h.networking;
 
+import h.Executable;
 import h.operations.Operation;
 
+import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.util.HashMap;
 
@@ -12,12 +14,14 @@ public class CentralCoordinator implements Coordinator {
 
     private int emptyPlayerSlots;
     private int readyPlayers;
+    private int finishedPlayers;
 
     private HashMap<Integer,Operation> allTurns;
 
     public CentralCoordinator() {
         emptyPlayerSlots = playerSlots;
         readyPlayers = 0;
+        finishedPlayers = 0;
         allTurns = new HashMap<>();
     }
 
@@ -92,5 +96,20 @@ public class CentralCoordinator implements Coordinator {
         System.out.println("It's in, time to let everyone know...");
         synchronized(this) { notifyAll(); }
         System.out.println("There, done.");
+    }
+
+
+    @Override
+    public synchronized void goodGame(int ID) throws RemoteException, NotBoundException {
+        // For now, we're going to assume this method only
+        // gets called when the game is over, not if someone
+        // decides to duck out early.
+        finishedPlayers++;
+
+        // If there aren't anymore players
+        if (finishedPlayers == playerSlots) {
+            // Tell the server to deregister you
+            Executable.endServer();
+        }
     }
 }

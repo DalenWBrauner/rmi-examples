@@ -2,6 +2,7 @@ package h.networking;
 
 import h.operations.Operation;
 
+import java.rmi.NotBoundException;
 import java.rmi.Remote;
 import java.rmi.RemoteException;
 
@@ -35,4 +36,6 @@ public interface Coordinator extends Remote {
     /** Returns the maximum number of players in a game. */
     int maxPlayers() throws RemoteException;
 
+    /** Informs the coordinator you're done playing. */
+    public void goodGame(int ID) throws RemoteException, NotBoundException;
 }

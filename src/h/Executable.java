@@ -14,13 +14,14 @@ import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
+import java.util.ArrayList;
 
 public class Executable {
     public final static String coordinatorName = "Coordinator";
     public final static int portNo = 64246;
-
-    // Server-only
-    public static Registry serverRegistry;
+    private static Registry serverRegistry;
+    private static Coordinator theCoordinator;
+    private static ArrayList<Remote> stubs = new ArrayList<>();
 
     public static void main(String[] args) {
         try {
@@ -43,7 +44,8 @@ public class Executable {
         System.out.println("Server started!");
 
         // Add the coordinator
-        Coordinator theCoordinator = new CentralCoordinator();
+        //Coordinator theCoordinator = new CentralCoordinator();
+        theCoordinator = new CentralCoordinator();
         register(coordinatorName, theCoordinator);
     }
 
@@ -56,14 +58,19 @@ public class Executable {
     private static void register(String name, Remote remoteObject) throws RemoteException {
         Remote stub = UnicastRemoteObject.exportObject(remoteObject,0);
         serverRegistry.rebind(name, stub);
+        stubs.add(stub); // We'll need this to unexport it later
     }
 
     /* Client-only methods */
 
     private static void executeClient() throws RemoteException, NotBoundException {
-        // Connect to the registry
+        // Connect* to the registry
         Registry registry = LocateRegistry.getRegistry(portNo);
         System.out.println("Client started!");
+
+        // *we haven't actually connected, just created an object
+        // that will point to registry; if it doesn't actually exist,
+        // we'll find out the first time we try to USE it.
 
         // Get the coordinator
         Coordinator coordinator = (Coordinator) registry.lookup(coordinatorName);
@@ -104,5 +111,31 @@ public class Executable {
         System.out.println("PLAYING!");
         ourGame.start();
 
+        // Once the game is over
+        System.out.println("Good game, everyone!");
+        coordinator.goodGame(ID);
+
+    }
+
+    public static void endServer() throws RemoteException, NotBoundException {
+        System.out.println("Server exiting...");
+
+//        // Clean up our stubs
+//        System.out.println("Cleaning stubs...");
+//        for (Remote stub : stubs) {
+//            UnicastRemoteObject.unexportObject(stub, false);
+//        }
+
+        // Remove our coordinator from the registry
+        System.out.println("Unbinding coordinator...");
+        serverRegistry.unbind(coordinatorName);
+
+        // Unexport the coordinator
+        System.out.println("Unexporting coordinator...");
+        UnicastRemoteObject.unexportObject(theCoordinator, true);
+
+        // Unexport the registry itself
+        System.out.println("Unbinding registry...");
+        UnicastRemoteObject.unexportObject(serverRegistry, true);
     }
 }
